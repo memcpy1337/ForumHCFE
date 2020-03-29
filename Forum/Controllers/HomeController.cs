@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ForumHCFE.Models;
 
-namespace Forum.Controllers
+namespace ForumHCFE.Controllers
 {
     public class HomeController : Controller
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ForumHCFE.Data.Migrations
 {
-    public partial class Addinitialentitymodels : Migration
+    public partial class addinitialentitymodels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

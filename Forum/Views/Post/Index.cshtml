@@ -1,0 +1,26 @@
+﻿@model ForumHCFE.Models.Post.PostIndexModel
+
+<h1>@Model.Title</h1>
+
+<div>
+   Автор: @Model.Author (@Model.AuthorRating)
+   Создан: @Model.Created
+</div>
+<div>
+    @Model.PostContent
+</div>
+@if (Model.Replies.Any())
+{
+    foreach(var reply in Model.Replies)
+    {
+<div>
+    <div>
+        Автор ответа: @reply.Author 
+        Ответ создан: @reply.Created
+    </div>
+    <div>
+       Reply: @reply.ReplyContent
+    </div>
+</div>
+    }
+}

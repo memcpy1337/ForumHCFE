@@ -13,9 +13,7 @@ namespace ForumHCFE.Service
     {
         private readonly ApplicationDbContext _context;
 
-        public PostService()
-        {
-        }
+      
 
         public PostService(ApplicationDbContext context)
         {
@@ -49,10 +47,11 @@ namespace ForumHCFE.Service
         public Post GetById(int id)
         {
             return _context.Posts.Where(post => post.Id == id)
-                .Include(post => post.User)
-                .Include(post => post.Replies).ThenInclude(reply => reply.User)
-                .Include(post => post.Forum)
-                .First();
+                 .Include(post => post.Forum)
+                 .Include(post => post.User)
+                 .Include(post => post.Replies)
+                 .ThenInclude(reply => reply.User)
+                 .FirstOrDefault();
         }
 
         public IEnumerable<Post> GetFilteredPosts(string searchQuery)

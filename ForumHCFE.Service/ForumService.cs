@@ -38,13 +38,17 @@ namespace ForumHCFE.Service
 
         public Forum GetById(int id)
         {
-            var forum = _context.Forums.Where(f => f.Id == id)
+            var forum = _context.Forums
+                .Where(f => f.Id == id)
                 .Include(f => f.Posts)
-                  .ThenInclude(p => p.User)
+                .ThenInclude(f => f.User)
                 .Include(f => f.Posts)
-                  .ThenInclude(p => p.Replies)
-                    .ThenInclude(r => r.User)
-                    .FirstOrDefault();
+                .ThenInclude(f => f.Replies)
+                .ThenInclude(f => f.User)
+                .Include(f => f.Posts)
+                .ThenInclude(p => p.Forum)
+                .FirstOrDefault();
+
             return forum;
         }
 

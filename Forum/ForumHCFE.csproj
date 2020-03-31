@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ForumHCFE.Service\ForumHCFE.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
+  </ItemGroup>
+
 </Project>

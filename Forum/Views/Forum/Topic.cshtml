@@ -1,6 +1,15 @@
 ﻿@model ForumHCFE.Models.Forum.ForumTopicModel
 
 <h1>Добро пожаловать на ветку компании @Model.Forum.Name</h1>
+<span id="headingBtn">
+    <a asp-controller="Post"
+       asp-action="Create"
+       asp-route-id=@Model.Forum.Id class="btn btn-newPost">
+        CreatePost
+    </a>
+
+</span>
+
 @if (Model.Posts.Any())
 {
     <table class="table table-bordered table-hover">

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ForumHCFE.Data.Models;
 namespace ForumHCFE.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

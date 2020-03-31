@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ForumHCFE.Data.Migrations
 {
-    public partial class addinitialentitymodels : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,10 @@ namespace ForumHCFE.Data.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false)
+                    Rating = table.Column<int>(nullable: false),
+                    ProfileImageUrl = table.Column<string>(nullable: true),
+                    MemberSince = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,7 +179,7 @@ namespace ForumHCFE.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Titile = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),

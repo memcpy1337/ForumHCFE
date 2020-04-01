@@ -37,6 +37,7 @@ namespace ForumHCFE.Controllers
                 AuthorImageUrl = post.User.ProfileImageUrl,
                 AuthorRating = post.User.Rating,
                 Created = post.Created,
+
                 PostContent = post.Content,
                 Replies = replies
 
@@ -67,7 +68,7 @@ namespace ForumHCFE.Controllers
             var post = BuildPost(model, user);
 
             await _postService.Add(post);
-            return RedirectToAction("Index", "Post", new { post.Id });
+            return RedirectToAction("Index", "Post", new { id = post.Id });
 
         }
 
@@ -79,6 +80,7 @@ namespace ForumHCFE.Controllers
                 Title = model.Title,
                 Content = model.Content,
                 Created = DateTime.Now,
+                Forum = forum,
                 User = user
 
 

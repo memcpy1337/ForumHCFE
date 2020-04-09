@@ -1,50 +1,100 @@
 ﻿@model ForumHCFE.Models.Forum.ForumTopicModel
 
-<h1>Добро пожаловать на ветку компании @Model.Forum.Name</h1>
-<span id="headingBtn">
-    <a asp-controller="Post"
-       asp-action="Create"
-       asp-route-id=@Model.Forum.Id class="btn btn-newPost">
-        CreatePost
-    </a>
-
-</span>
-
-@if (Model.Posts.Any())
-{
-    <table class="table table-bordered table-hover">
-        <tbody>
-            @foreach (var post in Model.Posts)
-{
-                <tr>
-                    <td>
-                        <a asp-controller="Post" asp-action="Index" asp-route-id="@post.Id">
-                            @post.Title
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <span>@Model.Forum.Name Форум</span>
+        <div class="sectionHeading">
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+        <span id="headingBtn"><a asp-controller="Post" asp-action="Create" asp-route-id="@Model.Forum.Id" class="btn btn-newPost">Создать тред</a>
+        </span>
+        }
+        <form asp-controller="Forum" asp-action="Search" method="post">
+            <div class="searchForm">
+                <input asp-for="SearchQuery" type="text" placeholder="Найти..." class="searchBar" onfocus="clearThis(this)">
+                <button type="submit" class="btn buttonSearch">
+                    <i class="material-icons">search</i>
+                </button>
+            </div>
+            <input asp-for="Forum.Id" name="id" type="hidden" />
+        </form>
+        </div>
+        <div class="sectionDescription">
+            <div class="forumLogo" style="background-image: url(@("../../"+Model.Forum.ImageUrl))"></div>
+            <p>Добро пожаловать в @Model.Forum.Name.</p>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <p>
+                    <span>
+                        Вы должны быть
+                        <a asp-controller="Account" asp-action="Register">
+                            зарегистрированным
                         </a>
-                        
-                    </td>
-                    <td>
-                        @post.Author
-                    </td>
-                    <td>
-                        @post.DatePosted
-                    </td>
-                    <td>
-                        @post.RepliesCount
-                    </td>
-                </tr>
-}
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="noPosts">
-        <h3>
-            На данный момент нет тредов о этой компании. <br />
-            <a asp-controller="Post" asp-action="Create" asp-route-id="@Model.Forum.Id">
-                <span>Создать</span>
-            </a>
-        </h3>
+                        чтобы создать новый тред.
+                    </span>
+                </p>
+            }
+        </div>
     </div>
+    <div class="row forumIndexContent">
+        @if (Model.Posts.Any())
+        {
+            <table class="table table-hover table-bordered" id="forumIndexTable">
+                <tbody>
+                    @foreach(var post in Model.Posts)
+                    {
+                        <tr>
+                            <td>
+                                <div class="postData">
+                                    <div class="postTitle">
+                                        <a asp-controller="Post" asp-action="Index" asp-route-id="@post.Id">@post.Title</a>
+                                    </div>
+                                    <div class="forumSubTitle">
+                                        <div>
+                                            <span class="postAuthor">
+                                                <a asp-controller="Profile" asp-action="Detail" asp-route-id="@post.AuthorId">
+                                                    @post.Author
+                                                </a>
+                                            </span>
+                                            (@post.AuthorRating)       
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="forumPostCount">
+                                    Ответы: @post.RepliesCount
+                                </div>
+                            </td>
+                            <td>
+                                <div class="postDate">@post.DatePosted</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="noPosts">
+                <i class="material-icons md-72">question_answer</i>
+                <h3>
+                    Не обнаружено постов в этой ветке.
+                    Почему бы не
+                    <a asp-controller="Post" asp-action="Create" asp-route-id="@Model.Forum.Id">
+                        <span>Создать</span>
+                    </a>
+                    его?
+                </h3>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts{
+<script>
+    function clearThis(targer) {
+        target.value = "";
+    }
+</script>
+
 }

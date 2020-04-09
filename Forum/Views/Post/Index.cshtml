@@ -1,26 +1,76 @@
 ﻿@model ForumHCFE.Models.Post.PostIndexModel
 
-<h1>@Model.Title</h1>
+<div class="container body-content">
+    <div class="row postHeader">
+        <div class="postHeading">
+            <span class="postIndexTitle">
+                @Model.Title
+            </span>
+            <span id="headingBtn"><a asp-controller="Forum" asp-action="Topic" asp-route-id="@Model.ForumId" class="btn btn-back">Назад к @Model.ForumName</a></span>
+        </div>
+    </div>
 
-<div>
-   Автор: @Model.Author (@Model.AuthorRating)
-   Создан: @Model.Created
+
+
+<div class="row" id="postIndexContent">
+    <div class="col-md-3 postAuthorContainer">
+        <div class="postAuthorImage" style="background-image: url(@Model.AuthorImageUrl);"></div>
+        <a asp-asp-controller="Profile" asp-action="Detail" asp-route-id="@Model.AuthorId">
+            @Model.Author
+        </a>
+        <span class="postData">@Model.Created</span>
+        @if (Model.IsAuthorAdmin)
+        {
+            <span class="isAdmin smaller">Админ</span>
+        }
+    </div>
+    <div class="col-md-9 postContentContainer">
+        <div class="postContent">
+            @Html.Raw(Model.PostContent)
+        </div>
+    </div>
 </div>
-<div>
-    @Model.PostContent
-</div>
-@if (Model.Replies.Any())
+<div class="row" id="replyDivider"></div>
+@if(User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <span><a asp-controller="Reply" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-newReply">
+            Ответить
+              </a>
+         </span>
+    </div>
+}
+@if(Model.Replies.Any())
 {
     foreach(var reply in Model.Replies)
     {
-<div>
-    <div>
-        Автор ответа: @reply.Author 
-        Ответ создан: @reply.Created
-    </div>
-    <div>
-       Reply: @reply.ReplyContent
-    </div>
-</div>
+        <div class="row replyContent">
+            <div class="col-md-3 replyAuthorContainer">
+                <div class="postAuthorImage" style="background-image: url(@reply.AuthorImageUrl)"></div>
+                <a asp-controller="Profile" asp-action="Detail" asp-route-id="@reply.AuthorId">
+                    @reply.Author
+                </a>
+                @if (reply.IsAuthorAdmin)
+                {
+                    <div class="isAdmin smaller">Админ</div>
+                    <br />
+                }
+                <span>@reply.Created</span>
+            </div>
+            <dv class="col-md-9 replyContentContainer">
+                <div class="postContent">
+                    @Html.Raw(reply.ReplyContent)
+                </div>
+            </dv>
+        </div>
     }
 }
+else
+{
+    <div class="noPosts">
+        <h3>
+            В данный момент никто не ответил на этот пост. Будьте первым!<br />
+        </h3>
+    </div>
+}
+    </div>

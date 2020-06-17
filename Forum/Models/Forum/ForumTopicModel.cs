@@ -13,4 +13,7 @@ namespace ForumHCFE.Models.Forum
         public string SearchQuery { get; set; }
 
     }
+     
+      
+
 }

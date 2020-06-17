@@ -12,6 +12,6 @@ namespace ForumHCFE.Data.Models
         public DateTime Created { get; set; }
         public string ImageUrl { get; set; }
 
-        public virtual IEnumerable<Post> Posts { get; set; }
+        public IEnumerable<Post> Posts { get; set; }
     }
 }

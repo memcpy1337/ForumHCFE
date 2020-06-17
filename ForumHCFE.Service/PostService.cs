@@ -13,65 +13,125 @@ namespace ForumHCFE.Service
     {
         private readonly ApplicationDbContext _context;
 
-       
-
         public PostService(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public async Task Add(Post post)
         {
             _context.Add(post);
             await _context.SaveChangesAsync();
         }
 
-        public Task AddReply(PostReply reply)
+        public async Task AddReply(PostReply reply)
         {
-            throw new NotImplementedException();
+            _context.PostReplies.Add(reply);
+            await _context.SaveChangesAsync();
         }
 
-        public Task Delete(int id)
+        public async Task Archive(int id)
         {
-            throw new NotImplementedException();
+            var post = GetById(id);
+            post.IsArchived = true;
+            _context.Update(post);
+            await _context.SaveChangesAsync();
         }
 
-        public Task EditPostContent(int id, string newContent)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var post = GetById(id);
+            _context.Remove(post);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditPostContent(int id, string content)
+        {
+            var post = GetById(id);
+            post.Content = content;
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<Post> GetAll()
         {
-            return _context.Posts
+            var posts = _context.Posts
+                .Include(post => post.Forum)
                 .Include(post => post.User)
-                .Include(post => post.Replies).ThenInclude(reply => reply.User)
-                .Include(post => post.Forum);
+                .Include(post => post.Replies)
+                .ThenInclude(reply => reply.User);
+            return posts;
+        }
+
+        public IEnumerable<Post> GetFilteredPosts(string searchQuery)
+        {
+            var query = searchQuery.ToLower();
+
+            return _context.Posts
+                .Include(post => post.Forum)
+                .Include(post => post.User)
+                .Include(post => post.Replies)
+                .Where(post =>
+                    post.Title.ToLower().Contains(query)
+                 || post.Content.ToLower().Contains(query));
+        }
+
+        public IEnumerable<ApplicationUser> GetAllUsers(IEnumerable<Post> posts)
+        {
+            var users = new List<ApplicationUser>();
+
+            foreach (var post in posts)
+            {
+                users.Add(post.User);
+
+                if (!post.Replies.Any()) continue;
+
+                users.AddRange(post.Replies.Select(reply => reply.User));
+            }
+
+            return users.Distinct();
         }
 
         public Post GetById(int id)
         {
             return _context.Posts.Where(post => post.Id == id)
-                 .Include(post => post.User)
-                 .Include(post => post.Replies).ThenInclude(reply => reply.User)
-                 .Include(post => post.Forum)
-                 .First();
+                .Include(post => post.Forum)
+                .Include(post => post.User)
+                .Include(post => post.Replies)
+                .ThenInclude(reply => reply.User)
+                .FirstOrDefault();
         }
 
-        public IEnumerable<Post> GetFilteredPosts(string searchQuery)
+        public string GetForumImageUrl(int id)
         {
-            throw new NotImplementedException();
+            var post = GetById(id);
+            return post.Forum.ImageUrl;
         }
 
-        public IEnumerable<Post> GetLatestPosts(int n)
+        public IEnumerable<Post> GetLatestPosts(int count)
         {
-            return GetAll().OrderByDescending(post => post.Created).Take(n);
+            var allPosts = GetAll().OrderByDescending(post => post.Created);
+            return allPosts.Take(count);
         }
 
-        public IEnumerable<Post> GetPostsByForum(int id)
+        public IEnumerable<Post> GetPostsBetween(DateTime start, DateTime end)
         {
-            return _context.Forums
-                .Where(forum => forum.Id == id).First()
-                .Posts;
+            return _context.Posts.Where(post => post.Created >= start && post.Created <= end);
+        }
+
+        public IEnumerable<Post> GetPostsByForumId(int id)
+        {
+            return _context.Forums.First(forum => forum.Id == id).Posts;
+        }
+
+        public IEnumerable<Post> GetPostsByUserId(int id)
+        {
+            return _context.Posts.Where(post => post.User.Id == id.ToString());
+        }
+
+        public int GetReplyCount(int id)
+        {
+            return GetById(id).Replies.Count();
         }
     }
 }

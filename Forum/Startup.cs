@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ForumHCFE.Service;
 using ForumHCFE.Data.Models;
+using ForumHCFE.Helpers;
+
 
 namespace ForumHCFE
 {
@@ -46,7 +48,11 @@ namespace ForumHCFE
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IForum, ForumService>();
+            services.AddScoped<IApplicationUser, ApplicationUserService>();
+            services.AddScoped<IPostFormatter, PostFormatter>();
             services.AddScoped<IPost, PostService>();
+            services.AddScoped<IUpload, UploadService>();
+            // services.AddScoped<IPostReply, PostReplyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

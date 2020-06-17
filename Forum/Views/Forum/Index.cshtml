@@ -1,21 +1,55 @@
 ﻿@model ForumHCFE.Models.Forum.ForumIndexModel
 
-<h1>Forums</h1>
-<table class="table table-hover" id="forumIndexTable">
-    <tbody>
-        @foreach (var forum in Model.ForumList)
-        {
-            <tr>
-                <td>
-                    <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">
-                        @forum.Name
-                    </a>
-                </td>
-                <td>
-                    @forum.Description
-                </td>
-            </tr>
+    <div class="container body-content">
+        <div class="row sectionHeader">
+            <div class="sectionHeading">Разделы форума</div>
+            <div class="sectionDescription">
+                <p>Добро пожаловать на <strong>Joblex</strong>. Это свободный форум, но пожалуйста, соблюдайте правила общения!</p>
+                <p>
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <span>Вы должны быть <a asp-controller="Account" asp-action="Register">зарегистрированным</a> чтобы создать новую тему.</span>
+                    }
+                </p>
+            </div>
+        </div>
+        <div class="row" id="forumIndexContent">
+            <table class="table table-hover" id="forumIndexTable">
+                <tbody>
+                    @foreach (var forum in Model.ForumList)
+                    {
+                        <tr>
+                            <td>
+                                <div class="forumLogo" style="background-image: url(@forum.ImageUrl); background-size:100%"></div>
+                                <div class="forumData">
+                                    <div class="forumTitle">
+                                        <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">@forum.Name</a>
+                                    </div>
+                                    <div class="forumSubTitle">
+                                        @if (forum.HasRecentPost)
+                                        {
+                                            <div class="hasRecentPost">Активная!</div>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="forumPostCount">
+                                    @forum.NumberOfPosts Обсуждения
+                                </div>
+                                <div class="forumMemberCount">
+                                    @forum.NumberOfUsers Пользователи
+                                </div>
+                            </td>
+                            <td>
+                                <div class="forumDescription">
+                                    @forum.Description
+                                </div>
+                            </td>
+                        </tr>
+                    }
 
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>

@@ -9,15 +9,25 @@ namespace ForumHCFE.Data
    public interface IPost
 
     {
+        Task Add(Post post);
+        Task Archive(int id);
+        Task Delete(int id);
+        Task EditPostContent(int id, string content);
+
+        Task AddReply(PostReply reply);
+
+        int GetReplyCount(int id);
+
         Post GetById(int id);
         IEnumerable<Post> GetAll();
+        IEnumerable<Post> GetPostsByUserId(int id);
+        IEnumerable<Post> GetPostsByForumId(int id);
+        IEnumerable<Post> GetPostsBetween(DateTime start, DateTime end);
         IEnumerable<Post> GetFilteredPosts(string searchQuery);
-        IEnumerable<Post> GetPostsByForum(int id);
-        IEnumerable<Post> GetLatestPosts(int n);
-        Task Add(Post post);
-        Task Delete(int id);
-        Task EditPostContent(int id, string newContent);
-        
+        IEnumerable<ApplicationUser> GetAllUsers(IEnumerable<Post> posts);
+        IEnumerable<Post> GetLatestPosts(int forumId);
+        string GetForumImageUrl(int id);
+
     }
 
     

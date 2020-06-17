@@ -1,0 +1,57 @@
+﻿@using ForumHCFE.Models.AccountViewModels
+@model ForumHCFE.Models.AccountViewModels.RegisterViewModel
+
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading">
+            Регистрация
+        </div>
+        <div class="sectionDescription">
+            <p>Создайте аккаунт чтобы воспользоваться всеми возможностями сайта.</p>
+        </div>
+    </div>
+    <div class="row" id="registerContent">
+        <div id="registerFormWrapper">
+            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" id="registerForm">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email">Электронная почта</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Username">Никнейм</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Пароль</label>
+
+
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Повторите пароль</label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label name="User_Class">Вы работодатель или соискатель?</label>
+                    <select name="subjects"><option value="1">Работодатель</option><option value="2">Соискатель</option></select>
+                    <span name="User_Class" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label name="FIO">ФИО</label>
+                    <input name="FIO" class="form-control" />
+                    <span name="FIO" class="text-danger"></span>
+                </div>
+                <button type="submit" id="registerBtn" class="btn btn-lg btn-success">Регистрация</button>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

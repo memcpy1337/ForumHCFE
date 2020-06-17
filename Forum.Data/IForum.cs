@@ -7,13 +7,18 @@ namespace ForumHCFE.Data
 {
     public interface IForum
     {
-        Forum GetById(int id);
-        IEnumerable<Forum> GetAll();
-        IEnumerable<ApplicationUser> GetAllActiveUsers();
-
-        Task Create(Forum forum);
-        Task Delete(int forumId);
-        Task UpdateForumTitle(int forumId, string newTitle);
-        Task UpdateForumDescription(int forumId, string newDescription);
+        Models.Forum GetById(int id);
+        IEnumerable<Models.Forum> GetAll();
+        Task Create(Models.Forum forum);
+        Task Delete(int id);
+        Task UpdateForumTitle(int id, string title);
+        Task UpdateForumDescription(int id, string description);
+        Post GetLatestPost(int forumId);
+        IEnumerable<ApplicationUser> GetActiveUsers(int forumId);
+        bool HasRecentPost(int id);
+        Task Add(Models.Forum forum);
+        Task SetForumImage(int id, Uri uri);
+        IEnumerable<Post> GetFilteredPosts(string searchQuery);
+        IEnumerable<Post> GetFilteredPosts(int forumId, string modelSearchQuery);
     }
 }

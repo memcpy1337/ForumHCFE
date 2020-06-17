@@ -1,0 +1,48 @@
+﻿@model ForumHCFE.Models.AccountViewModels.LoginViewModel
+@using ForumHCFE.Models.AccountViewModels
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ForumHCFE.Data.Models.ApplicationUser> SignInManager
+
+<div class="container body-content"
+    <div class="row" id="signInContent">
+        <div id="signInFormWrapper">
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username">Никнейм</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Пароль</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            
+                            <input asp-for="RememberMe" />
+                            Запомнить меня
+                            @*@Html.DisplayNameFor(m => m.RememberMe)*@
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Войти</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a asp-action="ForgotPassword">Забыли пароль?</a>
+                    </p>
+                    <p>
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Зарегистровать новый аккаунт?</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
